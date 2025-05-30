@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/CBV.iml" filepath="$PROJECT_DIR$/.idea/CBV.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Django-Study/itlike_project/.idea/itlike_project.iml" filepath="$PROJECT_DIR$/../../Django-Study/itlike_project/.idea/itlike_project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../product_data_backend/product_data_backend/.idea/product_data_backend.iml" filepath="$PROJECT_DIR$/../../product_data_backend/product_data_backend/.idea/product_data_backend.iml" />
+    </modules>
+  </component>
+</project>
