@@ -1,0 +1,10 @@
+"contentType: urlencoded \r\n\r\na=1&b=2  原生django的request.POST 针对的是urlencoded数据"
+'contentTyoe: json \r\n\r\n{"a":1,"b":2}' 原生django的request.POST 无法解析json数据'
+
+
+restful接口:
+    /sers/book/ GET 查看所有资源, 返回所有资源
+    /sers/book/ POST 添加资源,返回添加的资源
+    /sers/book/1 GET 查看某个资源, 返回这个一个资源
+    /sers/book/1 PUT 编辑某个资源, 返回这个编辑之后的资源
+    /sers/book/1 DELETE 删除某个资源, 返回空

@@ -22,12 +22,13 @@ from rest_framework.views import APIView
 @method_decorator(csrf_exempt, name='dispatch')
 class BookView(APIView):
     def get(self, request):
-        print("query_params:", request.query_params)
+        print("query_params:", request.query_params)  # request.query_params 获取get请求的数据
         return HttpResponse("这是一个 APIView get请求")
 
     def post(self, request):
         print("data:", request.data)
-        return HttpResponse("这是一个 APIView post请求")
+        return HttpResponse("这是一个 APIView post请求")  # request.data 获取post请求的数据
 
     def delete(self, request):
         return HttpResponse("这是一个 APIView delete请求")
+

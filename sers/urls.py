@@ -16,11 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from sers import views
 
 from django.urls import include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('book/', include('book.urls')),
-    path('sers/', include('sers.urls'))
+    path('book/', views.SersBookView.as_view()),
+    path('book/<int:book_id>', views.SersBookView.as_view())
 ]
+
