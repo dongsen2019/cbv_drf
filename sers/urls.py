@@ -22,6 +22,6 @@ from django.urls import include
 
 urlpatterns = [
     path('book/', views.SersBookView.as_view()),
-    path('book/<int:book_id>', views.SersBookView.as_view())
+    path('book/<int:book_id>', views.SersBookDetailView.as_view())
 ]
 

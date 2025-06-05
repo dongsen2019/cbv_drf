@@ -6,20 +6,37 @@ from rest_framework.response import Response
 from sers.models import Book
 
 # Create your views here.
-
+#  ======================  基于APIView的接口实现 ===========================
 
 # 针对模型设计序列化器
-class BookSerializers(serializers.Serializer):
-    title = serializers.CharField(max_length=32)
+# class BookSerializers(serializers.Serializer):
+#     title = serializers.CharField(max_length=32)
+#
+#     # required=False 该字段可以为空 但是序列化器的约束要和数据库模型的约束一致,否则,后续序列化器验证通过,而数据库的数据插入报错
+#     price = serializers.IntegerField(required=False)
+#     date = serializers.DateField(source="pub_date")  # 重命名输出的序列化字段
+#
+#     def create(self, validated_data):
+#         # 添加数据逻辑
+#         book = Book.objects.create(**validated_data)
+#         return book
+#
+#     def update(self, instance, validated_data):
+#         print("instance:", instance)
+#         print("validated_data:", validated_data)
+#         # 更新逻辑解耦
+#         Book.objects.filter(pk=instance.id).update(**validated_data)  # update不同于create 返回的是更新数据的条数, create返回增加的数据
+#         updated_book = Book.objects.get(pk=instance.id)
+#
+#         return updated_book
 
-    # required=False 该字段可以为空 但是序列化器的约束要和数据库模型的约束一致,否则,后续序列化器验证通过,而数据库的数据插入报错
-    price = serializers.IntegerField(required=False)
-    date = serializers.DateField(source="pub_date")  # 重命名输出的序列化字段
-
-    def create(self, validated_data):
-        # 添加数据逻辑
-        book = Book.objects.create(**validated_data)
-        return book
+class BookSerializers(serializers.ModelSerializer):
+    date = serializers.DateField(source="pub_date")
+    class Meta:
+        model = Book
+        # fields = "__all__"
+        # fields = ["title", "price"]
+        exclude = ["pub_date"]  # 排除哪些字段
 
 
 class SersBookView(APIView):
@@ -67,7 +84,7 @@ class SersBookView(APIView):
             # book = Book.objects.create(**serializer.validated_data)
             # print(book)
 
-            serializer.save()  # save()方法调用Baseserializer.save,并调用方法调用Baseserializer.create()
+            serializer.save()  # save()方法调用Baseserializer.save, 由于instance未传参 is None,就调用方法调用Baseserializer.create()
             return Response(serializer.data)
         else:
             # 校验失败
@@ -76,14 +93,42 @@ class SersBookView(APIView):
 
 class SersBookDetailView(APIView):
 
-    def get(self, request, id):
-        pass
+    def get(self, request, book_id):
+        book = Book.objects.get(pk=book_id)
+        print(book.id)
+        '''
+        单条数据 many=False 的序列化过程
+        d = {}
+        d[""] = obj.title
+        d[""] = obj.price
+        d["date"] = obj.pub_date  当序列化器有sourse参数时
+        '''
+        serializer = BookSerializers(instance=book, many=False)
+        print(serializer.data)
+        return Response(serializer.data)
 
-    def put(self, request, id):
-        pass
+    def put(self, request, book_id):
+        update_book = Book.objects.get(pk=book_id)
 
-    def delete(self, request, id):
-        pass
+        # 构建序列化器
+        serializer = BookSerializers(instance=update_book, data=request.data)
+
+        # is_valid() 校验提交数据
+        if serializer.is_valid():
+            # 更新逻辑
+            # Book.objects.filter(pk=book_id).update(**serializer.validated_data)  # update不同于create 返回的是更新数据的条数, create返回增加的数据
+            # updated_book = Book.objects.get(pk=book_id)
+            # serializer.instance = updated_book
+
+            serializer.save()  # save()方法调用Baseserializer.save, 由于instance已传参, is not None,就调用方法调用Baseserializer.update()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
 
 
+    def delete(self, request, book_id):
+        Book.objects.get(pk=book_id).delete()
+        return Response
 
+
+# ======================   基于GenericAPIView的接口实现 =======================
