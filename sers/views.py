@@ -130,5 +130,3 @@ class SersBookDetailView(APIView):
         Book.objects.get(pk=book_id).delete()
         return Response
 
-
-# ======================   基于GenericAPIView的接口实现 =======================

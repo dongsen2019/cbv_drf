@@ -16,12 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from GenericAPIView import views
 
 from django.urls import include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('book/', include('book.urls')),
-    path('sers/', include('sers.urls')),
-    path('generic/', include('GenericAPIView.urls'))
+    path('book/', views.GenericBookView.as_view()),
+    path('book/<int:pk>', views.GenericBookDetailView.as_view()),
+    path('publish/', views.GenericPublishView.as_view()),
+    path('publish/<int:pk>', views.GenericPublishDetailView.as_view())
 ]
+
+
+

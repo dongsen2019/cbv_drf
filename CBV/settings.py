@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'book.apps.BookConfig',
     'rest_framework',
     'sers',
+    'GenericAPIView',
 ]
 
 MIDDLEWARE = [
