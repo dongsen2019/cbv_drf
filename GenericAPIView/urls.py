@@ -24,7 +24,11 @@ urlpatterns = [
     path('book/', views.GenericBookView.as_view()),
     path('book/<int:pk>', views.GenericBookDetailView.as_view()),
     path('publish/', views.GenericPublishView.as_view()),
-    path('publish/<int:pk>', views.GenericPublishDetailView.as_view())
+    path('publish/<int:pk>', views.GenericPublishDetailView.as_view()),
+    path('author/', views.GenericAuthorView.as_view()),
+    path('author/<int:pk>', views.GenericAuthorDetailView.as_view()),
+    path('location/', views.GenericLocationView.as_view()),
+    path('location/<int:pk>', views.GenericLocationDetailView.as_view())
 ]
 
 

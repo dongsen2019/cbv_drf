@@ -17,3 +17,7 @@ class Author(models.Model):
     name = models.CharField(max_length=32)
     age = models.IntegerField()
 
+
+class BookLocation(models.Model):
+    book_name = models.CharField(max_length=32)
+    location = models.CharField(max_length=18)

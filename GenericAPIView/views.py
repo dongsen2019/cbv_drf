@@ -3,7 +3,8 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
-from GenericAPIView.models import Book, Publish, Author
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from GenericAPIView.models import Book, Publish, Author, BookLocation
 
 # Create your views here.
 
@@ -18,8 +19,10 @@ class BookSerializers(serializers.ModelSerializer):
 
 
 class GenericBookView(GenericAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializers
+    # GenericAPIView 封装了APIView 新增了4个方法 get_queryset get_object  get_serializer get_serializer_class
+    # 以下的两个配置项就是供这4个方法调用时,能够取到对应的对象
+    queryset = Book.objects.all()  # get_queryset 和 get_object 方法内部需要使用到的配置项变量
+    serializer_class = BookSerializers  # get_serializer 方法中调用 get_serializer_class 获取 serializer_class
 
     def get(self, request):
         # 构建序列化器对象:
@@ -150,10 +153,58 @@ class GenericPublishDetailView(GenericAPIView):
 
 # =================== 基于Mixins 和 GenericAPIViEw 的接口实现 ========================
 
-class GenericAuthorView(GenericAPIView):
-    pass
+class AuthorSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = "__all__"
+        # fields = ["title", "price"]
 
 
-class GenericAuthorDetailView(GenericAPIView):
-    pass
+class GenericAuthorView(ListModelMixin, CreateModelMixin, GenericAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializers
+
+    def get(self, request):
+
+        return self.list(request)
+
+    def post(self, request):
+
+        return self.create(request)
+
+
+class GenericAuthorDetailView(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializers
+
+    def get(self, request, pk):
+        return self.retrieve(request, pk)
+
+    def put(self, request, pk):
+        return self.update(request, pk)
+
+    def delete(self, request, pk):
+        return self.destroy(request, pk)
+
+
+# ============= 基于 rest_framework.generics 中的 ListCreateAPIView, RetrieveUpdateDestroyAPIView ==============
+
+# 增删改查查五种方法的排列组合在 ListCreateAPIView, RetrieveUpdateDestroyAPIView 在 rest_framework.generics中
+# 这些类中帮你写好了 增删改查查五种类方法
+
+class LocationSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = BookLocation
+        fields = "__all__"
+        # fields = ["title", "price"]
+
+
+class GenericLocationView(ListCreateAPIView):
+    queryset = BookLocation.objects.all()
+    serializer_class = LocationSerializers
+
+
+class GenericLocationDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = BookLocation.objects.all()
+    serializer_class = LocationSerializers
 

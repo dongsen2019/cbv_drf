@@ -125,7 +125,6 @@ class SersBookDetailView(APIView):
         else:
             return Response(serializer.errors)
 
-
     def delete(self, request, book_id):
         Book.objects.get(pk=book_id).delete()
         return Response
