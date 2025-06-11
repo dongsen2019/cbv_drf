@@ -16,13 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from ViewSet import views
 
 from django.urls import include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('book/', include('book.urls')),
-    path('sers/', include('sers.urls')),
-    path('generic/', include('GenericAPIView.urls')),
-    path('viewset/', include('ViewSet.urls')),
+    path('book/', views.ViewSetBookView.as_view({"get": "get_all", "post": "add_object"})),
+    path('book/<int:pk>', views.ViewSetBookView.as_view({"get": "get_object", "put": "update_object", "delete": "delete_object"})),
+    path('publish/', views.ViewSetPublishView.as_view({"get": "list", "post": "create"})),
+    path('publish/<int:pk>', views.ViewSetPublishView.as_view({"get": "retrieve", "put": "update", "delete": "destroy"})),
+    # path('author/', views.ViewSetAuthorView.as_view()),
+    # path('author/<int:pk>', views.ViewSetAuthorDetailView.as_view()),
 ]
+
